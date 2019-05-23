@@ -2,6 +2,7 @@ package DictView;
 
 import DictController.*;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -11,7 +12,7 @@ public class GUI extends JFrame {
     JComboBox<String> cbChoose;
     JPanel panel;
     JTextField tfWord;
-    JButton butAddDict, butAddWord, butFix, butDel;
+    JButton butAddDict, butAddWord, butEdit, butDel;
     JScrollPane scrollPanel;
     JList<String> listWord;
     JTextArea taMeaning;
@@ -21,9 +22,9 @@ public class GUI extends JFrame {
     JMenuItem itemOpen, itemSave;
 
     DictController controller = new DictController();
-    String[] dictionary = { "Anh - Việt", "Việt - Anh" };
 
     DefaultListModel<String> stage;
+    DefaultComboBoxModel<String> listDict;
 
     public GUI() {
         super("Từ Điển");
@@ -31,18 +32,19 @@ public class GUI extends JFrame {
     }
 
     public void initComponents() {
-
-        stage = controller.getAllNamesInDict(dictionary[0]);
+        
+        listDict = controller.initDictComboBox();
+        stage = controller.getAllNamesInDict(listDict.getElementAt(0));
 
         panel = new JPanel();
         tfWord = new JTextField();
-        cbChoose = new JComboBox<String>(dictionary);
+        cbChoose = new JComboBox<String>(listDict);
         listWord = new JList<String>(stage);
         scrollPanel = new JScrollPane(listWord);
         taMeaning = new JTextArea();
         butAddDict = new JButton("Thêm từ điển");
         butAddWord = new JButton("Thêm từ");
-        butFix = new JButton("Sửa từ");
+        butEdit = new JButton("Sửa từ");
         butDel = new JButton("Xóa từ");
 
         menu = new JMenuBar();
@@ -61,7 +63,7 @@ public class GUI extends JFrame {
         cbChoose.setBounds(300, 15, 130, 30);
         butAddDict.setBounds(450, 15, 150, 30);
         butAddWord.setBounds(620, 15, 100, 30);
-        butFix.setBounds(730, 15, 100, 30);
+        butEdit.setBounds(730, 15, 100, 30);
         butDel.setBounds(840, 15, 100, 30);
         scrollPanel.setBounds(20, 60, 250, 540);
         taMeaning.setBounds(300, 60, 675, 540);
@@ -76,7 +78,7 @@ public class GUI extends JFrame {
         panel.add(cbChoose);
         panel.add(butAddDict);
         panel.add(butAddWord);
-        panel.add(butFix);
+        panel.add(butEdit);
         panel.add(butDel);
         panel.add(scrollPanel);
         panel.add(taMeaning);
@@ -136,7 +138,9 @@ public class GUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-
+                Component component = (Component) arg0.getSource();
+                JFrame frame = (JFrame) SwingUtilities.getRoot(component);
+                (new addDictFrame(frame)).setVisible(true);
             }
         });
 
@@ -144,15 +148,21 @@ public class GUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-
+                Component component = (Component) arg0.getSource();
+                JFrame frame = (JFrame) SwingUtilities.getRoot(component);
+                (new addWordFrame(frame)).setVisible(true);
             }
         });
 
-        butFix.addActionListener(new ActionListener() {
+        butEdit.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-
+                if (!listWord.isSelectionEmpty()) {
+                    Component component = (Component) arg0.getSource();
+                    JFrame frame = (JFrame) SwingUtilities.getRoot(component);
+                    (new editWordFrame(frame)).setVisible(true);
+                }
             }
         });
 
@@ -160,9 +170,159 @@ public class GUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-
+                if (!listWord.isSelectionEmpty()) {
+                }
             }
         });
+
+    }
+
+    public class addDictFrame extends JDialog {
+
+        private static final long serialVersionUID = 1L;
+        JLabel lDict;
+        JTextField tfDict;
+        JButton confirm;
+
+        public addDictFrame(Frame parent) {
+            super(parent, "Add Dictionary");
+            this.setSize(400, 150);
+            this.setLayout(null);
+            this.setResizable(false);
+            this.setModal(true);
+            this.setLocationRelativeTo(null);
+
+            lDict = new JLabel("Dictionary:");
+            tfDict = new JTextField();
+            confirm = new JButton("Confirm");
+
+            lDict.setBounds(20, 20, 50, 20);
+            tfDict.setBounds(90, 20, 280, 20);
+            confirm.setBounds(150, 60, 90, 30);
+
+            this.add(lDict);
+            this.add(tfDict);
+            this.add(confirm);
+
+            confirm.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    controller.addNewDict(tfDict.getText());
+                    dispose();
+                }
+            });
+        }
+
+    }
+
+    public class addWordFrame extends JDialog {
+
+        private static final long serialVersionUID = 1L;
+        JLabel lWord, lPronounce, lMean;
+        JTextField tfWord, tfPronouce, tfMean;
+        JScrollPane spAdd;
+        JButton confirm;
+        JTextArea taMean;
+
+        public addWordFrame(Frame parent) {
+            super(parent, "Add Word");
+            this.setSize(400, 330);
+            this.setLayout(null);
+            this.setResizable(false);
+            this.setModal(true);
+            this.setLocationRelativeTo(null);
+
+            lWord = new JLabel("Word:");
+            lPronounce = new JLabel("Pronounce:");
+            lMean = new JLabel("Meaning:");
+            tfWord = new JTextField();
+            tfPronouce = new JTextField();
+            taMean = new JTextArea();
+            spAdd = new JScrollPane(taMean);
+            confirm = new JButton("Confirm");
+            taMean.setEditable(true);
+            taMean.setLineWrap(true);
+
+            lWord.setBounds(20, 20, 50, 20);
+            lPronounce.setBounds(20, 60, 60, 20);
+            lMean.setBounds(20, 100, 50, 20);
+            tfWord.setBounds(90, 20, 280, 20);
+            tfPronouce.setBounds(90, 60, 280, 20);
+            spAdd.setBounds(90, 100, 280, 130);
+            confirm.setBounds(150, 245, 90, 30);
+
+            this.add(lWord);
+            this.add(lPronounce);
+            this.add(lMean);
+            this.add(tfWord);
+            this.add(tfPronouce);
+            this.add(spAdd);
+            this.add(confirm);
+
+            confirm.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    dispose();
+                }
+            });
+        }
+
+    }
+
+    public class editWordFrame extends JDialog {
+
+        private static final long serialVersionUID = 1L;
+        JLabel lWord, lPronounce, lMean;
+        JTextField tfWord, tfPronouce, tfMean;
+        JScrollPane spAdd;
+        JButton confirm;
+        JTextArea taMean;
+
+        public editWordFrame(Frame parent) {
+            super(parent, "Edit Word");
+            this.setSize(400, 330);
+            this.setLayout(null);
+            this.setResizable(false);
+            this.setModal(true);
+            this.setLocationRelativeTo(null);
+
+            lWord = new JLabel("Word:");
+            lPronounce = new JLabel("Pronounce:");
+            lMean = new JLabel("Meaning:");
+            tfWord = new JTextField();
+            tfPronouce = new JTextField();
+            taMean = new JTextArea();
+            spAdd = new JScrollPane(taMean);
+            confirm = new JButton("Confirm");
+            taMean.setEditable(true);
+            taMean.setLineWrap(true);
+
+            lWord.setBounds(20, 20, 50, 20);
+            lPronounce.setBounds(20, 60, 60, 20);
+            lMean.setBounds(20, 100, 50, 20);
+            tfWord.setBounds(90, 20, 280, 20);
+            tfPronouce.setBounds(90, 60, 280, 20);
+            spAdd.setBounds(90, 100, 280, 130);
+            confirm.setBounds(150, 245, 90, 30);
+
+            this.add(lWord);
+            this.add(lPronounce);
+            this.add(lMean);
+            this.add(tfWord);
+            this.add(tfPronouce);
+            this.add(spAdd);
+            this.add(confirm);
+
+            confirm.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    dispose();
+                }
+            });
+        }
 
     }
 

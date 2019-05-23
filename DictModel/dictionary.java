@@ -4,16 +4,23 @@ import java.io.*;
 import java.util.*;
 
 public class dictionary {
-    private String Dict_name;
+    private String dictName;
+    private String dictFIleName;
+
     private final List<Word> words;
 
-    public dictionary(String name) {
-        this.Dict_name = name;
-        this.words = readDictFromFile(name);
+    public dictionary(String name, String filename) {
+        this.dictName = name;
+        this.dictFIleName = filename;
+        File f = new File(filename);
+        if (f.exists())
+            this.words = readDictFromFile(filename);
+        else
+            this.words = new ArrayList<Word>();
     }
 
     public String getDictName() {
-        return this.Dict_name;
+        return this.dictName;
     }
 
     public String getMeaning(String name) {

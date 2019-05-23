@@ -2,6 +2,8 @@ package DictController;
 
 import DictView.*;
 import DictModel.*;
+
+import java.io.File;
 import java.util.*;
 
 import javax.swing.*;
@@ -10,6 +12,7 @@ public class DictController {
     private dictionary dict;
     private DefaultListModel<String> model;
     private DefaultListModel<String> stage;
+    private DefaultComboBoxModel<String> listDict;
 
     public void startApplication() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
@@ -29,6 +32,7 @@ public class DictController {
     }
 
     public DefaultListModel<String> getAllNamesInDict(String name) {
+
         model = new DefaultListModel<String>();
         stage = new DefaultListModel<String>();
         String filename = null;
@@ -36,8 +40,9 @@ public class DictController {
             filename = "AnhViet.txt";
         else if (name.equals("Việt - Anh"))
             filename = "VietAnh.txt";
+            else filename = name + ".txt";
 
-        dict = new dictionary(filename);
+        dict = new dictionary(name,filename);
 
         List<Word> words = dict.getWords();
         for (Word w : words) {
@@ -72,6 +77,18 @@ public class DictController {
         for (indx = 0; indx < model.getSize(); indx++) {
             stage.addElement(model.getElementAt(indx));
         }
+    }
+
+    public DefaultComboBoxModel<String> initDictComboBox() {
+        listDict = new DefaultComboBoxModel<>();
+        listDict.addElement("Anh - Việt");
+        listDict.addElement("Việt - Anh");
+        return listDict;
+    }
+
+    public void addNewDict(String filename) {
+        listDict.addElement(filename);
+        listDict.setSelectedItem(filename);
     }
 
     public Word getWord(String string) {
