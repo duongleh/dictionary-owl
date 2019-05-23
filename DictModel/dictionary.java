@@ -16,8 +16,12 @@ public class dictionary {
         return this.Dict_name;
     }
 
-    public String getMeaning(int index){
-        return 	(words.get(index)).getMeaning();
+    public String getMeaning(String name) {
+        for (Word x : words) {
+            if (x.getName().equals(name))
+                return x.getMeaning();
+        }
+        return null;
     }
 
     public List<Word> getWords() {
@@ -70,7 +74,7 @@ public class dictionary {
             }
         }
     }
-    
+
     public List<Word> readDictFromFile(String filename) {
         BufferedReader fr = null;
         List<Word> listWord = new ArrayList<Word>();

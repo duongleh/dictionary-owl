@@ -61,7 +61,7 @@ public class GUI extends JFrame {
         cbChoose.setBounds(300, 15, 130, 30);
         butAddDict.setBounds(450, 15, 150, 30);
         butAddWord.setBounds(620, 15, 100, 30);
-        butFix.setBounds(730,15, 100, 30);
+        butFix.setBounds(730, 15, 100, 30);
         butDel.setBounds(840, 15, 100, 30);
         scrollPanel.setBounds(20, 60, 250, 540);
         taMeaning.setBounds(300, 60, 675, 540);
@@ -90,6 +90,7 @@ public class GUI extends JFrame {
                 DefaultListModel<String> stage2;
                 int indx;
                 String input = tfWord.getText();
+
                 if (!input.equals("")) {
                     if ((stage2 = controller.findWords(input)) != null) {
                         stage.clear();
@@ -97,6 +98,7 @@ public class GUI extends JFrame {
                             stage.addElement(stage2.getElementAt(indx));
                         }
                         listWord.setModel(stage);
+                        // listWord.setSelectedIndex(0);
                     }
                 } else {
                     stage.clear();
@@ -105,12 +107,15 @@ public class GUI extends JFrame {
                 }
             }
         });
+
         listWord.addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent arg0) {
-                int idx = listWord.getSelectedIndex();
-                taMeaning.setText(controller.getMeaningOfWord(idx));
+                if (listWord.isSelectionEmpty())
+                    taMeaning.setText("");
+                else
+                    taMeaning.setText(controller.getMeaningOfWord(listWord.getSelectedIndex()));
             }
         });
 
@@ -139,26 +144,25 @@ public class GUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-              
+
             }
         });
 
-butFix.addActionListener(new ActionListener(){
+        butFix.addActionListener(new ActionListener() {
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        
-    }
-});
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+
+            }
+        });
 
         butDel.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-            
+
             }
         });
-     
 
     }
 

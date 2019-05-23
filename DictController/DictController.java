@@ -48,7 +48,7 @@ public class DictController {
     }
 
     public String getMeaningOfWord(int index) {
-        return dict.getMeaning(index);
+        return dict.getMeaning(stage.getElementAt(index));
     }
 
     public DefaultListModel<String> findWords(String word) {
