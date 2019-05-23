@@ -4,9 +4,8 @@ This project is an assignment of Object-oriented programming course based on ins
 
 ### Installing
 
-Stay at the root folder to compile (Dictionary)
+Stay at the root folder (Dictionary)
 
 ```
-$ javac DictMain/mainDict.java
-$ java DictMain.mainDict  
+$ ./run.sh
 ```
