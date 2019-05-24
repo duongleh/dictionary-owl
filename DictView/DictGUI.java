@@ -9,8 +9,8 @@ import javax.swing.event.*;
 
 public class DictGUI extends JFrame {
     private static final long serialVersionUID = 1L;
-    JComboBox<String> cbChoose;
     JPanel panel;
+    JComboBox<String> cbChoose;
     JTextField tfWord;
     JButton butAddDict, butAddWord, butEdit, butDel;
     JScrollPane scrollPanel;
@@ -58,6 +58,7 @@ public class DictGUI extends JFrame {
         listWord.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         taMeaning.setEditable(false);
         listWord.setModel(stage);
+        taMeaning.setLineWrap(true);
 
         tfWord.setBounds(20, 15, 250, 30);
         cbChoose.setBounds(300, 15, 130, 30);
@@ -174,6 +175,12 @@ public class DictGUI extends JFrame {
                 if (!listWord.isSelectionEmpty()) {
                     controller.deleteWord(listWord.getSelectedIndex());
                 }
+            }
+        });
+        
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                controller.writeToFile();
             }
         });
 

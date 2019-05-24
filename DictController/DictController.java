@@ -129,4 +129,7 @@ public class DictController {
         model.remove(i);
     }
 
+    public void writeToFile(){
+        dict.writeDictToFile();
+    }
 }
