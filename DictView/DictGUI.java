@@ -13,13 +13,13 @@ public class DictGUI extends JFrame {
     JComboBox<String> cbChoose;
     JTextField tfWord;
     JButton butAddDict, butAddWord, butEdit, butDel;
-    JScrollPane scrollPanel;
+    JScrollPane scrollPanel,spMeaning;
     JList<String> listWord;
     JTextArea taMeaning;
 
     JMenuBar menu;
-    JMenu menuFile, menuEdit, menuAboutus;
-    JMenuItem itemOpen, itemSave;
+    JMenu menuMenu;
+    JMenuItem itemAbout;
 
     DictController controller = new DictController();
 
@@ -46,13 +46,11 @@ public class DictGUI extends JFrame {
         butAddWord = new JButton("Thêm từ");
         butEdit = new JButton("Sửa từ");
         butDel = new JButton("Xóa từ");
+        spMeaning = new JScrollPane(taMeaning);
 
         menu = new JMenuBar();
-        menuFile = new JMenu("File");
-        menuEdit = new JMenu("Edit");
-        menuAboutus = new JMenu("About");
-        itemOpen = new JMenuItem("Open");
-        itemSave = new JMenuItem("Save");
+        menuMenu = new JMenu("Menu");
+        itemAbout = new JMenuItem("About");
 
         panel.setLayout(null);
         listWord.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -67,13 +65,10 @@ public class DictGUI extends JFrame {
         butEdit.setBounds(730, 15, 100, 30);
         butDel.setBounds(840, 15, 100, 30);
         scrollPanel.setBounds(20, 60, 250, 540);
-        taMeaning.setBounds(300, 60, 675, 540);
+        spMeaning.setBounds(300, 60, 675, 540);
 
-        menu.add(menuFile);
-        menu.add(menuEdit);
-        menu.add(menuAboutus);
-        menuFile.add(itemOpen);
-        menuFile.add(itemSave);
+        menu.add(menuMenu);
+        menuMenu.add(itemAbout);
 
         panel.add(tfWord);
         panel.add(cbChoose);
@@ -82,7 +77,7 @@ public class DictGUI extends JFrame {
         panel.add(butEdit);
         panel.add(butDel);
         panel.add(scrollPanel);
-        panel.add(taMeaning);
+        panel.add(spMeaning);
         this.add(panel);
         this.setJMenuBar(menu);
 
@@ -93,7 +88,6 @@ public class DictGUI extends JFrame {
                 DefaultListModel<String> stage2;
                 int indx;
                 String input = tfWord.getText();
-
                 if (!input.equals("")) {
                     if ((stage2 = controller.findWords(input)) != null) {
                         stage.clear();
@@ -102,9 +96,9 @@ public class DictGUI extends JFrame {
                         }
                         listWord.setModel(stage);
                         // listWord.setSelectedIndex(0);
-                    }
+                    } else
+                        taMeaning.setText("Word does not exist !");
                 } else {
-                    listWord.setSelectedIndex(-1);
                     stage.clear();
                     controller.resetStage();
                     listWord.setModel(stage);
@@ -177,10 +171,20 @@ public class DictGUI extends JFrame {
                 }
             }
         });
-        
+
+        itemAbout.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                Component component = (Component) arg0.getSource();
+                JFrame frame = (JFrame) SwingUtilities.getRoot(component);
+                (new aboutFrame(frame)).setVisible(true);
+            }
+        });
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                controller.writeToFile();
+                // controller.writeToFile();
             }
         });
 
@@ -195,7 +199,7 @@ public class DictGUI extends JFrame {
 
         public addDictFrame(Frame parent) {
             super(parent, "Add Dictionary");
-            this.setSize(400, 150);
+            this.setSize(420, 140);
             this.setLayout(null);
             this.setResizable(false);
             this.setModal(true);
@@ -205,9 +209,9 @@ public class DictGUI extends JFrame {
             tfDict = new JTextField();
             confirm = new JButton("Confirm");
 
-            lDict.setBounds(20, 20, 50, 20);
-            tfDict.setBounds(90, 20, 280, 20);
-            confirm.setBounds(150, 60, 90, 30);
+            lDict.setBounds(20, 20, 100, 20);
+            tfDict.setBounds(120, 20, 280, 35);
+            confirm.setBounds(170, 60, 90, 30);
 
             this.add(lDict);
             this.add(tfDict);
@@ -237,7 +241,7 @@ public class DictGUI extends JFrame {
 
         public addWordFrame(Frame parent) {
             super(parent, "Add Word");
-            this.setSize(400, 330);
+            this.setSize(420, 320);
             this.setLayout(null);
             this.setResizable(false);
             this.setModal(true);
@@ -255,14 +259,14 @@ public class DictGUI extends JFrame {
             taMean.setEditable(true);
             taMean.setLineWrap(true);
 
-            lWord.setBounds(20, 20, 50, 20);
-            lPronounce.setBounds(20, 60, 60, 20);
-            lMean.setBounds(20, 100, 50, 20);
-            tfWord.setBounds(90, 20, 280, 20);
-            tfPronouce.setBounds(90, 60, 280, 20);
-            spAdd.setBounds(90, 100, 280, 130);
-            confirm.setBounds(150, 245, 90, 30);
-            result.setBounds(250, 245, 90, 30);
+            lWord.setBounds(20, 20, 70, 20);
+            lPronounce.setBounds(20, 60, 100, 20);
+            lMean.setBounds(20, 100, 100, 20);
+            tfWord.setBounds(120, 20, 280, 35);
+            tfPronouce.setBounds(120, 60, 280, 35);
+            spAdd.setBounds(120, 100, 280, 130);
+            confirm.setBounds(160, 245, 90, 30);
+            result.setBounds(260, 245, 130, 30);
 
             this.add(lWord);
             this.add(lPronounce);
@@ -305,7 +309,7 @@ public class DictGUI extends JFrame {
 
         public editWordFrame(Frame parent) {
             super(parent, "Edit Word");
-            this.setSize(400, 330);
+            this.setSize(420, 320);
             this.setLayout(null);
             this.setResizable(false);
             this.setModal(true);
@@ -323,14 +327,14 @@ public class DictGUI extends JFrame {
             taMean.setEditable(true);
             taMean.setLineWrap(true);
 
-            lWord.setBounds(20, 20, 50, 20);
-            lPronounce.setBounds(20, 60, 60, 20);
-            lMean.setBounds(20, 100, 50, 20);
-            tfWord.setBounds(90, 20, 280, 20);
-            tfPronouce.setBounds(90, 60, 280, 20);
-            spAdd.setBounds(90, 100, 280, 130);
-            confirm.setBounds(150, 245, 90, 30);
-            result.setBounds(250, 245, 90, 30);
+            lWord.setBounds(20, 20, 70, 20);
+            lPronounce.setBounds(20, 60, 100, 20);
+            lMean.setBounds(20, 100, 100, 20);
+            tfWord.setBounds(120, 20, 280, 35);
+            tfPronouce.setBounds(120, 60, 280, 35);
+            spAdd.setBounds(120, 100, 280, 130);
+            confirm.setBounds(160, 245, 90, 30);
+            result.setBounds(260, 245, 130, 30);
 
             this.add(lWord);
             this.add(lPronounce);
@@ -353,13 +357,51 @@ public class DictGUI extends JFrame {
                                 taMean.getText());
                         if (re == -1)
                             result.setText("Word Exists !");
-                        if (re == 0)
+                        if (re == 0) {
+                            taMeaning.setText(controller.getContentOfWord(listWord.getSelectedIndex()));
                             dispose();
+                        }
                     }
                 }
             });
         }
+    }
 
+    public class aboutFrame extends JDialog {
+
+        private static final long serialVersionUID = 1L;
+        JLabel image;
+        JTextArea taAbout;
+        
+
+        String about = "   Some people like to read on a screen. Other people need the variety and artistry, the sight, smell, \nand feel of actual knowledge. We love seeing them on their shelves; we love having shelves for them.\n\n" +
+       "   We love taking them along when we leave the house and stacking them by their bedsides. We love \nfinding old letters and bookmarks in them. \n\n" +
+        "   We want to read in a way that offers a rich experience, more than the words only: the full offering ofadictionary. They are particular about covers, we want to surround ourselves with the definition of \ngood design.\n\n" +
+        "   We are constantly expanding our content scope with new, fresh material to help further educate ourusers as our community is growing bigger every day. Our goal is to help as many people as possible with reliable,high-quality, and easy-to-use reference material.\n\n" +
+        "   The leading dictionary featuring over 25,000 definitions spanning across critical definition topics. \nEach definition provides a clear and concise description of the term to help our users gain a \ncomprehensive understanding of the concept. \n\n" +
+        "   CONTACT US:\n" +
+        "   Email:Vukhanhly30@gmail.com\n"+
+        "   Address: HUD3 TayNam LinhDam Street";
+
+        public aboutFrame(Frame parent) {
+            super(parent, "About us");
+            this.setSize(888, 613);
+            this.setLayout(null);
+            this.setResizable(false);
+            this.setModal(true);
+            this.setLocationRelativeTo(null);
+            image = new JLabel(new ImageIcon("resources/Picture1.png"));
+            taAbout = new JTextArea(about);
+            taAbout.setLineWrap(true);
+            taAbout.setEditable(false);
+        
+            image.setBounds(600,385, 210, 210);
+            taAbout.setBounds(10, 10, 868, 380);
+           
+            this.add(image);
+            this.add(taAbout);
+
+        }
     }
 
     public static void main(String[] args) {

@@ -25,8 +25,12 @@ public class dictionary {
 
     public String getContent(String name) {
         for (Word x : words) {
-            if (x.getName().equals(name))
-                return x.getPronounce() + "\n" + x.getMeaning();
+            if (x.getName().equals(name)) {
+                if (x.getPronounce().equals(""))
+                    return x.getMeaning();
+                else
+                    return x.getPronounce() + "\n" + x.getMeaning();
+            }
         }
         return null;
     }

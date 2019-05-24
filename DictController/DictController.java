@@ -3,7 +3,12 @@ package DictController;
 import DictView.*;
 import DictModel.*;
 
-import java.util.*;
+import java.awt.*;
+import java.util.List;
+import java.awt.image.*;
+import java.io.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class DictController {
@@ -26,8 +31,16 @@ public class DictController {
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         view.setLocationRelativeTo(null);
         view.setVisible(true);
+        try {
+            BufferedImage bi = ImageIO.read(new File("resources/icon.png"));
+            ImageIcon im = new ImageIcon(bi.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+            view.setIconImage(im.getImage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
 
     public DefaultListModel<String> getAllNamesInDict(String name) {
 
@@ -129,7 +142,7 @@ public class DictController {
         model.remove(i);
     }
 
-    public void writeToFile(){
+    public void writeToFile() {
         dict.writeDictToFile();
     }
 }
