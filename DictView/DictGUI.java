@@ -184,7 +184,7 @@ public class DictGUI extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                // controller.writeToFile();
+                controller.writeToFile();
             }
         });
 
