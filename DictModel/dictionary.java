@@ -19,14 +19,14 @@ public class dictionary {
             this.words = new ArrayList<Word>();
     }
 
-    public String getDictName() {
-        return this.dictName;
+    public String getFileName() {
+        return this.dictFIleName;
     }
 
-    public String getMeaning(String name) {
+    public String getContent(String name) {
         for (Word x : words) {
             if (x.getName().equals(name))
-                return x.getMeaning();
+                return x.getPronounce() + "\n" + x.getMeaning();
         }
         return null;
     }
@@ -48,23 +48,26 @@ public class dictionary {
         words.add(w);
     }
 
-    public void removeWord(Word w) {
-        words.remove(w);
+    public void editWord(Word w, String name, String pronounce, String meaning) {
+        if (name.equals(""))
+            name = w.getName();
+        if (pronounce.equals(""))
+            pronounce = w.getPronounce();
+        if (meaning.equals(""))
+            meaning = w.getMeaning();
+        Word x = new Word(name, pronounce, meaning);
+        words.set(words.indexOf(w), x);
     }
 
-    public void editWord(Word w, String name, String pronounce, String meaning) {
-        w.editName(name);
-        w.editPronounce(pronounce);
-        w.editMeaning(meaning);
-
-        words.set(words.indexOf(w), w);
+    public void removeWord(Word w) {
+        words.remove(w);
     }
 
     public void writeDictToFile() {
         PrintWriter out = null;
 
         try {
-            out = new PrintWriter(getDictName());
+            out = new PrintWriter(getFileName());
             for (Word x : getWords()) {
                 out.println("@" + x.getName());
                 out.println(x.getPronounce());

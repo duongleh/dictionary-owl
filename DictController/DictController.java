@@ -3,9 +3,7 @@ package DictController;
 import DictView.*;
 import DictModel.*;
 
-import java.io.File;
 import java.util.*;
-
 import javax.swing.*;
 
 public class DictController {
@@ -22,7 +20,7 @@ public class DictController {
             e.printStackTrace();
         }
 
-        GUI view = new GUI();
+        DictGUI view = new DictGUI();
         view.setSize(1000, 675);
         view.setResizable(false);
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,9 +38,10 @@ public class DictController {
             filename = "AnhViet.txt";
         else if (name.equals("Việt - Anh"))
             filename = "VietAnh.txt";
-            else filename = name + ".txt";
+        else
+            filename = name + ".txt";
 
-        dict = new dictionary(name,filename);
+        dict = new dictionary(name, filename);
 
         List<Word> words = dict.getWords();
         for (Word w : words) {
@@ -52,8 +51,8 @@ public class DictController {
         return stage;
     }
 
-    public String getMeaningOfWord(int index) {
-        return dict.getMeaning(stage.getElementAt(index));
+    public String getContentOfWord(int index) {
+        return dict.getContent(stage.getElementAt(index));
     }
 
     public DefaultListModel<String> findWords(String word) {
@@ -91,74 +90,43 @@ public class DictController {
         listDict.setSelectedItem(filename);
     }
 
-    public Word getWord(String string) {
-        return dict.findWord(string);
+    public int addsWord(String name, String pronounce, String meaning) {
+        if (dict.findWord(name) == null) {
+            Word w = new Word(name, pronounce, meaning);
+            dict.addWord(w);
+            model.addElement(name);
+            stage.addElement(name);
+        } else
+            return -1;
+        return 0;
     }
 
-    public void addsWord() {
-        String name = null;
-        String pronounce = null;
-        String meaning = null;
-        Scanner scanner;
-        Word w = null;
-        boolean hasExc;
-        do {
-            try {
-                scanner = new Scanner(System.in);
-                System.out.println("Nhập từ mà bạn muốn thêm ");
-                System.out.print("Từ: ");
-                name = scanner.nextLine();
-                System.out.print("Phát âm: ");
-                pronounce = scanner.nextLine();
-                System.out.print("Nghĩa: ");
-                meaning = scanner.nextLine();
-                hasExc = false;
-                if (dict.findWord(name) != null)
-                    throw new Exception();
-            } catch (Exception exc) {
-                System.out.println("Word exists !");
-                System.out.println();
-                hasExc = true;
+    public int updateWord(int index, String name, String pronounce, String meaning) {
+        int i = 0;
+        if ((dict.findWord(name)) == null) {
+            dict.editWord(dict.findWord(stage.getElementAt(index)), name, pronounce, meaning);
+            for (i = 0; i < model.size(); i++) {
+                if (model.getElementAt(i).equals(stage.getElementAt(index)))
+                    break;
             }
-        } while (hasExc == true);
-        w = new Word(name, pronounce, meaning);
-        dict.addWord(w);
-    }
-
-    public void deleteWord(Word w) {
-        dict.removeWord(w);
-    }
-
-    public void updateWord(Word w) {
-        String name = null;
-        String pronounce = null;
-        String meaning = null;
-        Scanner scanner;
-        boolean hasExc;
-        do {
-            try {
-                scanner = new Scanner(System.in);
-                System.out.println("Cập nhập từ mới (ấn enter để bỏ qua): ");
-                System.out.print("Từ: ");
-                name = scanner.nextLine();
-                System.out.print("Phát âm: ");
-                pronounce = scanner.nextLine();
-                System.out.print("Nghĩa: ");
-                meaning = scanner.nextLine();
-                hasExc = false;
-            } catch (Exception exc) {
-                System.out.println("Invalid Syntax");
-                hasExc = true;
+            if (!name.equals("")) {
+                model.set(i, name);
+                stage.set(index, name);
             }
-        } while (hasExc == true);
+        } else
+            return -1;
+        return 0;
+    }
 
-        if (name.equals(""))
-            name = w.getName();
-        if (pronounce.equals(""))
-            pronounce = w.getPronounce();
-        if (meaning.equals(""))
-            meaning = w.getMeaning();
-        dict.editWord(w, name, pronounce, meaning);
+    public void deleteWord(int index) {
+        int i = 0;
+        dict.removeWord(dict.findWord(stage.getElementAt(index)));
+        for (i = 0; i < model.size(); i++) {
+            if (model.getElementAt(i).equals(stage.getElementAt(index)))
+                break;
+        }
+        stage.remove(index);
+        model.remove(i);
     }
 
 }

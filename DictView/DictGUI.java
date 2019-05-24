@@ -7,7 +7,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class GUI extends JFrame {
+public class DictGUI extends JFrame {
     private static final long serialVersionUID = 1L;
     JComboBox<String> cbChoose;
     JPanel panel;
@@ -26,13 +26,13 @@ public class GUI extends JFrame {
     DefaultListModel<String> stage;
     DefaultComboBoxModel<String> listDict;
 
-    public GUI() {
+    public DictGUI() {
         super("Từ Điển");
         initComponents();
     }
 
     public void initComponents() {
-        
+
         listDict = controller.initDictComboBox();
         stage = controller.getAllNamesInDict(listDict.getElementAt(0));
 
@@ -103,6 +103,7 @@ public class GUI extends JFrame {
                         // listWord.setSelectedIndex(0);
                     }
                 } else {
+                    listWord.setSelectedIndex(-1);
                     stage.clear();
                     controller.resetStage();
                     listWord.setModel(stage);
@@ -117,7 +118,7 @@ public class GUI extends JFrame {
                 if (listWord.isSelectionEmpty())
                     taMeaning.setText("");
                 else
-                    taMeaning.setText(controller.getMeaningOfWord(listWord.getSelectedIndex()));
+                    taMeaning.setText(controller.getContentOfWord(listWord.getSelectedIndex()));
             }
         });
 
@@ -171,6 +172,7 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 if (!listWord.isSelectionEmpty()) {
+                    controller.deleteWord(listWord.getSelectedIndex());
                 }
             }
         });
@@ -224,6 +226,7 @@ public class GUI extends JFrame {
         JScrollPane spAdd;
         JButton confirm;
         JTextArea taMean;
+        JLabel result;
 
         public addWordFrame(Frame parent) {
             super(parent, "Add Word");
@@ -241,6 +244,7 @@ public class GUI extends JFrame {
             taMean = new JTextArea();
             spAdd = new JScrollPane(taMean);
             confirm = new JButton("Confirm");
+            result = new JLabel();
             taMean.setEditable(true);
             taMean.setLineWrap(true);
 
@@ -251,6 +255,7 @@ public class GUI extends JFrame {
             tfPronouce.setBounds(90, 60, 280, 20);
             spAdd.setBounds(90, 100, 280, 130);
             confirm.setBounds(150, 245, 90, 30);
+            result.setBounds(250, 245, 90, 30);
 
             this.add(lWord);
             this.add(lPronounce);
@@ -259,12 +264,22 @@ public class GUI extends JFrame {
             this.add(tfPronouce);
             this.add(spAdd);
             this.add(confirm);
+            this.add(result);
 
             confirm.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    dispose();
+                    if (tfWord.getText().equals("") && tfPronouce.getText().equals("") && taMean.getText().equals(""))
+                        result.setText("Please Enter !");
+                    else {
+                        int re = -1;
+                        re = controller.addsWord(tfWord.getText(), tfPronouce.getText(), taMean.getText());
+                        if (re == -1)
+                            result.setText("Word Exists !");
+                        if (re == 0)
+                            dispose();
+                    }
                 }
             });
         }
@@ -279,6 +294,7 @@ public class GUI extends JFrame {
         JScrollPane spAdd;
         JButton confirm;
         JTextArea taMean;
+        JLabel result;
 
         public editWordFrame(Frame parent) {
             super(parent, "Edit Word");
@@ -296,6 +312,7 @@ public class GUI extends JFrame {
             taMean = new JTextArea();
             spAdd = new JScrollPane(taMean);
             confirm = new JButton("Confirm");
+            result = new JLabel();
             taMean.setEditable(true);
             taMean.setLineWrap(true);
 
@@ -306,6 +323,7 @@ public class GUI extends JFrame {
             tfPronouce.setBounds(90, 60, 280, 20);
             spAdd.setBounds(90, 100, 280, 130);
             confirm.setBounds(150, 245, 90, 30);
+            result.setBounds(250, 245, 90, 30);
 
             this.add(lWord);
             this.add(lPronounce);
@@ -314,12 +332,23 @@ public class GUI extends JFrame {
             this.add(tfPronouce);
             this.add(spAdd);
             this.add(confirm);
+            this.add(result);
 
             confirm.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    dispose();
+                    if (tfWord.getText().equals("") && tfPronouce.getText().equals("") && taMean.getText().equals(""))
+                        result.setText("Please Enter !");
+                    else {
+                        int re = -1;
+                        re = controller.updateWord(listWord.getSelectedIndex(), tfWord.getText(), tfPronouce.getText(),
+                                taMean.getText());
+                        if (re == -1)
+                            result.setText("Word Exists !");
+                        if (re == 0)
+                            dispose();
+                    }
                 }
             });
         }
@@ -330,7 +359,7 @@ public class GUI extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new GUI().setVisible(true);
+                new DictGUI().setVisible(true);
             }
         });
     }

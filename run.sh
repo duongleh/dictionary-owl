@@ -8,6 +8,6 @@ javac DictController/DictController.java
 javac DictMain/mainDict.java
 javac DictModel/dictionary.java
 javac DictModel/Word.java 
-javac DictView/GUI.java  
+javac DictView/DictGUI.java  
 
 java DictMain.mainDict
