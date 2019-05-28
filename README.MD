@@ -4,7 +4,7 @@ This project is an assignment of Object-oriented programming course based on ins
 
 ## Class Diagram
 
-![alt text](resources/classDiagram.jpg)
+![alt text](resources/classDiagram.png)
 
 ## How to install
 

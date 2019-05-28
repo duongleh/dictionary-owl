@@ -3,68 +3,56 @@ package DictModel;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.*;
+
 public class dictionary {
     private String dictName;
     private String dictFIleName;
-
-    private final List<Word> words;
+    private final List<Word> listWord;
+    private DefaultListModel<String> listName;
+    private DefaultListModel<String> stage;
 
     public dictionary(String name, String filename) {
+
         this.dictName = name;
         this.dictFIleName = filename;
         File f = new File(filename);
         if (f.exists())
-            this.words = readDictFromFile(filename);
+            this.listWord = readDictFromFile(filename);
         else
-            this.words = new ArrayList<Word>();
+            this.listWord = new ArrayList<Word>();
+
+        listName = new DefaultListModel<String>();
+        stage = new DefaultListModel<String>();
+
+        for (Word w : listWord) {
+            stage.addElement(w.getName());
+            listName.addElement(w.getName());
+        }
     }
 
     public String getFileName() {
         return this.dictFIleName;
     }
 
-    public String getContent(String name) {
-        for (Word x : words) {
-            if (x.getName().equals(name)) {
-                if (x.getPronounce().equals(""))
-                    return x.getMeaning();
-                else
-                    return x.getPronounce() + "\n" + x.getMeaning();
-            }
-        }
-        return null;
+    public List<Word> getListWord() {
+        return this.listWord;
     }
 
-    public List<Word> getWords() {
-        return this.words;
+    public DefaultListModel<String> getListName() {
+        return this.listName;
+    }
+
+    public DefaultListModel<String> getStage() {
+        return this.stage;
     }
 
     public Word findWord(String name) {
-        for (Word x : words) {
+        for (Word x : listWord) {
             if (x.getName().equals(name))
                 return x;
         }
-
         return null;
-    }
-
-    public void addWord(Word w) {
-        words.add(w);
-    }
-
-    public void editWord(Word w, String name, String pronounce, String meaning) {
-        if (name.equals(""))
-            name = w.getName();
-        if (pronounce.equals(""))
-            pronounce = w.getPronounce();
-        if (meaning.equals(""))
-            meaning = w.getMeaning();
-        Word x = new Word(name, pronounce, meaning);
-        words.set(words.indexOf(w), x);
-    }
-
-    public void removeWord(Word w) {
-        words.remove(w);
     }
 
     public void writeDictToFile() {
@@ -72,7 +60,7 @@ public class dictionary {
 
         try {
             out = new PrintWriter(getFileName());
-            for (Word x : getWords()) {
+            for (Word x : getListWord()) {
                 out.println("@" + x.getName());
                 out.println(x.getPronounce());
                 out.println(x.getMeaning());

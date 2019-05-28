@@ -11,20 +11,8 @@ public class Word {
         this.meaning = meaning;
     }
 
-    Word(String name) {
+    public Word(String name) {
         this.name = name;
-    }
-
-    public void editName(String name) {
-        this.name = name;
-    }
-
-    public void editPronounce(String pronounce) {
-        this.pronounce = pronounce;
-    }
-
-    public void editMeaning(String meaning) {
-        this.meaning = meaning;
     }
 
     public String getName() {

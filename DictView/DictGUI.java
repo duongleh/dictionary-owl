@@ -13,7 +13,7 @@ public class DictGUI extends JFrame {
     JComboBox<String> cbChoose;
     JTextField tfWord;
     JButton butAddDict, butAddWord, butEdit, butDel;
-    JScrollPane scrollPanel,spMeaning;
+    JScrollPane scrollPanel, spMeaning;
     JList<String> listWord;
     JTextArea taMeaning;
 
@@ -34,7 +34,7 @@ public class DictGUI extends JFrame {
     public void initComponents() {
 
         listDict = controller.initDictComboBox();
-        stage = controller.getAllNamesInDict(listDict.getElementAt(0));
+        stage = controller.initDict(listDict.getElementAt(0));
 
         panel = new JPanel();
         tfWord = new JTextField();
@@ -85,21 +85,14 @@ public class DictGUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                DefaultListModel<String> stage2;
-                int indx;
                 String input = tfWord.getText();
                 if (!input.equals("")) {
-                    if ((stage2 = controller.findWords(input)) != null) {
-                        stage.clear();
-                        for (indx = 0; indx < stage2.getSize(); indx++) {
-                            stage.addElement(stage2.getElementAt(indx));
-                        }
+                    if ((controller.searchWord(input)) == 1) {
                         listWord.setModel(stage);
-                        // listWord.setSelectedIndex(0);
+                        listWord.setSelectedIndex(0);
                     } else
                         taMeaning.setText("Word does not exist !");
                 } else {
-                    stage.clear();
                     controller.resetStage();
                     listWord.setModel(stage);
                 }
@@ -124,8 +117,7 @@ public class DictGUI extends JFrame {
             public void actionPerformed(ActionEvent arg0) {
                 JComboBox<String> cb = (JComboBox<String>) arg0.getSource();
                 String comboBox = (String) cb.getSelectedItem();
-                stage.clear();
-                stage = controller.getAllNamesInDict(comboBox);
+                stage = controller.initDict(comboBox);
                 listWord.setModel(stage);
             }
         });
@@ -184,7 +176,7 @@ public class DictGUI extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                controller.writeToFile();
+                // controller.writeToFile();
             }
         });
 
@@ -285,10 +277,12 @@ public class DictGUI extends JFrame {
                         result.setText("Please Enter !");
                     else {
                         int re = -1;
-                        re = controller.addsWord(tfWord.getText(), tfPronouce.getText(), taMean.getText());
+                        re = controller.addWord(tfWord.getText(), tfPronouce.getText(), taMean.getText());
                         if (re == -1)
                             result.setText("Word Exists !");
-                        if (re == 0)
+                        else if (re == -2)
+                            result.setText("Invalid Word !");
+                        else if (re == 0)
                             dispose();
                     }
                 }
@@ -372,16 +366,13 @@ public class DictGUI extends JFrame {
         private static final long serialVersionUID = 1L;
         JLabel image;
         JTextArea taAbout;
-        
 
-        String about = "   Some people like to read on a screen. Other people need the variety and artistry, the sight, smell, \nand feel of actual knowledge. We love seeing them on their shelves; we love having shelves for them.\n\n" +
-       "   We love taking them along when we leave the house and stacking them by their bedsides. We love \nfinding old letters and bookmarks in them. \n\n" +
-        "   We want to read in a way that offers a rich experience, more than the words only: the full offering ofadictionary. They are particular about covers, we want to surround ourselves with the definition of \ngood design.\n\n" +
-        "   We are constantly expanding our content scope with new, fresh material to help further educate ourusers as our community is growing bigger every day. Our goal is to help as many people as possible with reliable,high-quality, and easy-to-use reference material.\n\n" +
-        "   The leading dictionary featuring over 25,000 definitions spanning across critical definition topics. \nEach definition provides a clear and concise description of the term to help our users gain a \ncomprehensive understanding of the concept. \n\n" +
-        "   CONTACT US:\n" +
-        "   Email:Vukhanhly30@gmail.com\n"+
-        "   Address: HUD3 TayNam LinhDam Street";
+        String about = "   Some people like to read on a screen. Other people need the variety and artistry, the sight, smell, \nand feel of actual knowledge. We love seeing them on their shelves; we love having shelves for them.\n\n"
+                + "   We love taking them along when we leave the house and stacking them by their bedsides. We love \nfinding old letters and bookmarks in them. \n\n"
+                + "   We want to read in a way that offers a rich experience, more than the words only: the full offering ofadictionary. They are particular about covers, we want to surround ourselves with the definition of \ngood design.\n\n"
+                + "   We are constantly expanding our content scope with new, fresh material to help further educate ourusers as our community is growing bigger every day. Our goal is to help as many people as possible with reliable,high-quality, and easy-to-use reference material.\n\n"
+                + "   The leading dictionary featuring over 25,000 definitions spanning across critical definition topics. \nEach definition provides a clear and concise description of the term to help our users gain a \ncomprehensive understanding of the concept. \n\n"
+                + "   CONTACT US:\n" + "   Email:Vukhanhly30@gmail.com\n" + "   Address: HUD3 TayNam LinhDam Street";
 
         public aboutFrame(Frame parent) {
             super(parent, "About us");
@@ -394,10 +385,10 @@ public class DictGUI extends JFrame {
             taAbout = new JTextArea(about);
             taAbout.setLineWrap(true);
             taAbout.setEditable(false);
-        
-            image.setBounds(600,385, 210, 210);
+
+            image.setBounds(600, 385, 210, 210);
             taAbout.setBounds(10, 10, 868, 380);
-           
+
             this.add(image);
             this.add(taAbout);
 
