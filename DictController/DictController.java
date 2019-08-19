@@ -63,18 +63,20 @@ public class DictController {
         return stage;
     }
 
-    public int searchWord(String word) {
-        int indx, change = 0;
+    public DefaultListModel<String> searchWord(String word) {
         stage.clear();
-        for (indx = 0; indx < listName.getSize(); indx++) {
-            if ((listName.getElementAt(indx)).startsWith(word)) {
-                stage.addElement(listName.getElementAt(indx));
-                change = 1;
+        stage = new DefaultListModel();
+
+        if (word.equals("")) {
+            return resetStage();
+        } else {
+            for (int indx = 0; indx < listName.getSize(); indx++) {
+                if ((listName.getElementAt(indx)).startsWith(word)) {
+                    stage.addElement(listName.getElementAt(indx));
+                }
             }
+            return stage;
         }
-        if (change == 0)
-            return 0;
-        return 1;
     }
 
     public String getContentOfWord(int index) {
@@ -91,12 +93,11 @@ public class DictController {
 
     }
 
-    public void resetStage() {
-        int indx;
-        stage.clear();
-        for (indx = 0; indx < listName.getSize(); indx++) {
+    public DefaultListModel<String> resetStage() {
+        for (int indx = 0; indx < listName.getSize(); indx++) {
             stage.addElement(listName.getElementAt(indx));
         }
+        return stage;
     }
 
     public void addNewDict(String filename) {
@@ -105,7 +106,8 @@ public class DictController {
     }
 
     public int addWord(String name, String pronounce, String meaning) {
-        if (name.equals("")) return -2;
+        if (name.equals(""))
+            return -2;
         if (dict.findWord(name) == null) {
             Word w = new Word(name, pronounce, meaning);
             dict.getListWord().add(w);

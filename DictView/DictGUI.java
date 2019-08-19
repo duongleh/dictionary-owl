@@ -81,21 +81,24 @@ public class DictGUI extends JFrame {
         this.add(panel);
         this.setJMenuBar(menu);
 
-        tfWord.addActionListener(new ActionListener() {
+        tfWord.addKeyListener(new KeyListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void keyReleased(KeyEvent e) {
                 String input = tfWord.getText();
-                if (!input.equals("")) {
-                    if ((controller.searchWord(input)) == 1) {
-                        listWord.setModel(stage);
-                        listWord.setSelectedIndex(0);
-                    } else
-                        taMeaning.setText("Word does not exist !");
-                } else {
-                    controller.resetStage();
-                    listWord.setModel(stage);
-                }
+                stage = controller.searchWord(input);
+                listWord.setModel(stage);
+                listWord.setSelectedIndex(0);
+                if (stage.getSize() == 0)
+                    taMeaning.setText("Word does not exist !");
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
             }
         });
 
