@@ -65,7 +65,7 @@ public class DictController {
 
     public DefaultListModel<String> searchWord(String word) {
         stage.clear();
-        stage = new DefaultListModel();
+        stage = new DefaultListModel<String>();
 
         if (word.equals("")) {
             return resetStage();
