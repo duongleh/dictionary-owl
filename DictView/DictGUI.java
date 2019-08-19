@@ -145,7 +145,9 @@ public class DictGUI extends JFrame {
                 if (!listWord.isSelectionEmpty()) {
                     Component component = (Component) arg0.getSource();
                     JFrame frame = (JFrame) SwingUtilities.getRoot(component);
-                    (new editWordFrame(frame)).setVisible(true);
+                    (new editWordFrame(frame, listWord.getSelectedValue(),
+                            controller.getMeaningOfWord(listWord.getSelectedIndex()),
+                            controller.getPronouceOfWord(listWord.getSelectedIndex()))).setVisible(true);
                 }
             }
         });
@@ -270,14 +272,13 @@ public class DictGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     if (tfWord.getText().equals("") && tfPronouce.getText().equals("") && taMean.getText().equals(""))
-                        result.setText("Please Enter !");
-                    else {
-                        int re = -1;
-                        re = controller.addWord(tfWord.getText(), tfPronouce.getText(), taMean.getText());
+                        result.setText("Invalid Value !");
+                    else if (tfWord.getText().equals("")) {
+                        result.setText("Invalid Word !");
+                    } else {
+                        int re = controller.addWord(tfWord.getText(), tfPronouce.getText(), taMean.getText());
                         if (re == -1)
                             result.setText("Word Exists !");
-                        else if (re == -2)
-                            result.setText("Invalid Word !");
                         else if (re == 0)
                             dispose();
                     }
@@ -297,7 +298,7 @@ public class DictGUI extends JFrame {
         JTextArea taMean;
         JLabel result;
 
-        public editWordFrame(Frame parent) {
+        public editWordFrame(Frame parent, String word, String meaning, String pronounce) {
             super(parent, "Edit Word");
             this.setSize(420, 320);
             this.setLayout(null);
@@ -326,6 +327,10 @@ public class DictGUI extends JFrame {
             confirm.setBounds(160, 245, 90, 30);
             result.setBounds(260, 245, 130, 30);
 
+            tfWord.setText(word);
+            tfPronouce.setText(pronounce);
+            taMean.setText(meaning);
+
             this.add(lWord);
             this.add(lPronounce);
             this.add(lMean);
@@ -339,12 +344,11 @@ public class DictGUI extends JFrame {
 
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    if (tfWord.getText().equals("") && tfPronouce.getText().equals("") && taMean.getText().equals(""))
-                        result.setText("Please Enter !");
+                    if (tfWord.getText().equals("") || tfPronouce.getText().equals("") || taMean.getText().equals(""))
+                        result.setText("Invalid Value!");
                     else {
-                        int re = -1;
-                        re = controller.updateWord(listWord.getSelectedIndex(), tfWord.getText(), tfPronouce.getText(),
-                                taMean.getText());
+                        int re = controller.updateWord(listWord.getSelectedIndex(), tfWord.getText(),
+                                tfPronouce.getText(), taMean.getText());
                         if (re == -1)
                             result.setText("Word Exists !");
                         if (re == 0) {

@@ -86,6 +86,28 @@ public class DictController {
 
     }
 
+    public String getMeaningOfWord(int index) {
+        String name = stage.getElementAt(index);
+        for (Word x : dict.getListWord()) {
+            if (x.getName().equals(name)) {
+                return x.getMeaning();
+            }
+        }
+        return null;
+
+    }
+
+    public String getPronouceOfWord(int index) {
+        String name = stage.getElementAt(index);
+        for (Word x : dict.getListWord()) {
+            if (x.getName().equals(name)) {
+                return x.getPronounce();
+            }
+        }
+        return null;
+
+    }
+
     public DefaultListModel<String> resetStage() {
         for (int indx = 0; indx < listName.getSize(); indx++) {
             stage.addElement(listName.getElementAt(indx));
@@ -99,8 +121,6 @@ public class DictController {
     }
 
     public int addWord(String name, String pronounce, String meaning) {
-        if (name.equals(""))
-            return -2;
         if (dict.findWord(name) == null) {
             Word w = new Word(name, pronounce, meaning);
             dict.getListWord().add(w);
@@ -112,30 +132,30 @@ public class DictController {
     }
 
     public int updateWord(int index, String name, String pronounce, String meaning) {
-        int i = 0;
-        Word w, x;
-        if ((dict.findWord(name)) == null) {
-            w = dict.findWord(stage.getElementAt(index));
-            if (name.equals(""))
-                name = w.getName();
-            if (pronounce.equals(""))
-                pronounce = w.getPronounce();
-            if (meaning.equals(""))
-                meaning = w.getMeaning();
+        int i;
+        Word w = dict.findWord(stage.getElementAt(index));
 
-            x = new Word(name, pronounce, meaning);
-            dict.getListWord().set(dict.getListWord().indexOf(w), x);
+        if (dict.findWord(name) == null)
+            ;
+        else {
+            if (w.getName().equals(name))
+                ;
+            else {
+                return -1;
+            }
+        }
 
-            for (i = 0; i < listName.size(); i++) {
-                if (listName.getElementAt(i).equals(stage.getElementAt(index)))
-                    break;
-            }
-            if (!name.equals("")) {
-                stage.set(index, name);
-                listName.set(i, name);
-            }
-        } else
-            return -1;
+        Word x = new Word(name, pronounce, meaning);
+        dict.getListWord().set(dict.getListWord().indexOf(w), x);
+
+        for (i = 0; i < listName.size(); i++) {
+            if (listName.getElementAt(i).equals(stage.getElementAt(index)))
+                break;
+        }
+
+        stage.set(index, name);
+        listName.set(i, name);
+
         return 0;
     }
 
