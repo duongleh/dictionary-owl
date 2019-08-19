@@ -6,7 +6,7 @@ This project is an assignment of Object-oriented programming course based on ins
 
 ![alt text](resources/classDiagram.png)
 
-## How to install
+## How to run
 
 Stay at the root folder (Dictionary)
 

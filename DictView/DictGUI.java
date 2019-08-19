@@ -9,22 +9,27 @@ import javax.swing.event.*;
 
 public class DictGUI extends JFrame {
     private static final long serialVersionUID = 1L;
-    JPanel panel;
-    JComboBox<String> cbChoose;
-    JTextField tfWord;
-    JButton butAddDict, butAddWord, butEdit, butDel;
-    JScrollPane scrollPanel, spMeaning;
-    JList<String> listWord;
-    JTextArea taMeaning;
+    private DictController controller = new DictController();
+    private JPanel panel = new JPanel();
+    private JTextField tfWord = new JTextField();
 
-    JMenuBar menu;
-    JMenu menuMenu;
-    JMenuItem itemAbout;
+    private DefaultListModel<String> stage;
+    private DefaultComboBoxModel<String> listDict;
 
-    DictController controller = new DictController();
+    private JTextArea taMeaning = new JTextArea();
+    private JButton butAddDict = new JButton("Thêm từ điển");
+    private JButton butAddWord = new JButton("Thêm từ");
+    private JButton butEdit = new JButton("Sửa từ");
+    private JButton butDel = new JButton("Xóa từ");
+    private JScrollPane spMeaning = new JScrollPane(taMeaning);
 
-    DefaultListModel<String> stage;
-    DefaultComboBoxModel<String> listDict;
+    private JMenuBar menu = new JMenuBar();
+    private JMenu menuMenu = new JMenu("Menu");
+    private JMenuItem itemAbout = new JMenuItem("About");
+
+    private JComboBox<String> cbChoose;
+    private JList<String> listWord;
+    private JScrollPane scrollPanel;
 
     public DictGUI() {
         super("Từ Điển");
@@ -36,21 +41,9 @@ public class DictGUI extends JFrame {
         listDict = controller.initDictComboBox();
         stage = controller.initDict(listDict.getElementAt(0));
 
-        panel = new JPanel();
-        tfWord = new JTextField();
         cbChoose = new JComboBox<String>(listDict);
         listWord = new JList<String>(stage);
         scrollPanel = new JScrollPane(listWord);
-        taMeaning = new JTextArea();
-        butAddDict = new JButton("Thêm từ điển");
-        butAddWord = new JButton("Thêm từ");
-        butEdit = new JButton("Sửa từ");
-        butDel = new JButton("Xóa từ");
-        spMeaning = new JScrollPane(taMeaning);
-
-        menu = new JMenuBar();
-        menuMenu = new JMenu("Menu");
-        itemAbout = new JMenuItem("About");
 
         panel.setLayout(null);
         listWord.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

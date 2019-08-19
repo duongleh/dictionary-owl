@@ -8,22 +8,17 @@ import javax.swing.*;
 public class dictionary {
     private String dictName;
     private String dictFIleName;
-    private final List<Word> listWord;
-    private DefaultListModel<String> listName;
-    private DefaultListModel<String> stage;
+    private final List<Word> listWord = new ArrayList<Word>();
+    private DefaultListModel<String> listName = new DefaultListModel<String>();
+    private DefaultListModel<String> stage = new DefaultListModel<String>();
 
     public dictionary(String name, String filename) {
 
         this.dictName = name;
         this.dictFIleName = filename;
-        File f = new File(filename);
+        File f = new File(dictFIleName);
         if (f.exists())
-            this.listWord = readDictFromFile(filename);
-        else
-            this.listWord = new ArrayList<Word>();
-
-        listName = new DefaultListModel<String>();
-        stage = new DefaultListModel<String>();
+            readDictFromFile(dictFIleName);
 
         for (Word w : listWord) {
             stage.addElement(w.getName());
@@ -77,9 +72,8 @@ public class dictionary {
         }
     }
 
-    public List<Word> readDictFromFile(String filename) {
+    public void readDictFromFile(String filename) {
         BufferedReader fr = null;
-        List<Word> listWord = new ArrayList<Word>();
         char text;
         int c;
         String name = null, pronounce = null, meaning = null;
@@ -139,7 +133,6 @@ public class dictionary {
                 exc.printStackTrace();
             }
         }
-        return listWord;
     }
 
 }

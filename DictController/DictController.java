@@ -12,7 +12,8 @@ import javax.swing.*;
 
 public class DictController {
     private dictionary dict;
-    private DefaultComboBoxModel<String> listDict;
+    private DefaultComboBoxModel<String> listDict = new DefaultComboBoxModel<>();
+
     private DefaultListModel<String> listName;
     private DefaultListModel<String> stage;
 
@@ -30,18 +31,10 @@ public class DictController {
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         view.setLocationRelativeTo(null);
         view.setVisible(true);
-        try {
-            BufferedImage bi = ImageIO.read(new File("resources/icon.png"));
-            ImageIcon im = new ImageIcon(bi.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-            view.setIconImage(im.getImage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
     public DefaultComboBoxModel<String> initDictComboBox() {
-        listDict = new DefaultComboBoxModel<>();
         listDict.addElement("Anh - Việt");
         listDict.addElement("Việt - Anh");
         return listDict;
