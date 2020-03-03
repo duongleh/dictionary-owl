@@ -3,19 +3,21 @@ package DictController;
 import DictView.*;
 import DictModel.*;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class DictController {
+
+    private static DictController instance = new DictController();
+
     private dictionary dict;
     private DefaultComboBoxModel<String> listDict = new DefaultComboBoxModel<>();
 
     private DefaultListModel<String> listName;
     private DefaultListModel<String> stage;
+
+    public static DictController getInstance() {
+        return instance;
+    }
 
     public void startApplication() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
@@ -25,7 +27,7 @@ public class DictController {
             e.printStackTrace();
         }
 
-        DictGUI view = new DictGUI();
+        DictGUI view = DictGUI.getInstance();
         view.setSize(1000, 675);
         view.setResizable(false);
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

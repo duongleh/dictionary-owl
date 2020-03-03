@@ -4,7 +4,7 @@ import DictController.*;
 
 public class mainDict {
     public static void main(String[] args) {
-        DictController controller = new DictController();
+        DictController controller = DictController.getInstance();
         try {
             controller.startApplication();
         } catch (Exception e) {
