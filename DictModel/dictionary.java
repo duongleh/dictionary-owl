@@ -13,7 +13,6 @@ public class dictionary {
     private DefaultListModel<String> stage = new DefaultListModel<String>();
 
     public dictionary(String name, String filename) {
-
         this.dictName = name;
         this.dictFIleName = filename;
         File f = new File(dictFIleName);

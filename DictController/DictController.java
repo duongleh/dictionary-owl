@@ -3,29 +3,33 @@ package DictController;
 import DictView.*;
 import DictModel.*;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class DictController {
+
+    private static DictController instance = new DictController();
+
     private dictionary dict;
     private DefaultComboBoxModel<String> listDict = new DefaultComboBoxModel<>();
 
     private DefaultListModel<String> listName;
     private DefaultListModel<String> stage;
 
+    public static DictController getInstance() {
+        return instance;
+    }
+
     public void startApplication() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
         try {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "WikiTeX");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        DictGUI view = new DictGUI();
+        DictGUI view = DictGUI.getInstance();
         view.setSize(1000, 675);
         view.setResizable(false);
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -135,15 +139,8 @@ public class DictController {
         int i;
         Word w = dict.findWord(stage.getElementAt(index));
 
-        if (dict.findWord(name) == null)
-            ;
-        else {
-            if (w.getName().equals(name))
-                ;
-            else {
-                return -1;
-            }
-        }
+        if (dict.findWord(name) != null || w.getName().equals(name))
+            return -1;
 
         Word x = new Word(name, pronounce, meaning);
         dict.getListWord().set(dict.getListWord().indexOf(w), x);
