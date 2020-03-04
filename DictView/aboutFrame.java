@@ -23,7 +23,7 @@ public class aboutFrame extends JDialog {
         this.setResizable(false);
         this.setModal(true);
         this.setLocationRelativeTo(null);
-        image = new JLabel(new ImageIcon("resources/Picture1.png"));
+        image = new JLabel(new ImageIcon("assets/icon.png"));
         aboutArea = new JTextArea(info);
         aboutArea.setLineWrap(true);
         aboutArea.setEditable(false);
