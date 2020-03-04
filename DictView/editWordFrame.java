@@ -71,10 +71,8 @@ public class editWordFrame extends JDialog {
                             inputMeaning.getText());
                     if (re == -1)
                         resultLabel.setText("Word Exists !");
-                    if (re == 0) {
+                    if (re == 0)
                         dispose();
-                    }
-                    dispose();
                 }
             }
         });

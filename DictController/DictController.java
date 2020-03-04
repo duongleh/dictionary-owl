@@ -22,6 +22,8 @@ public class DictController {
     public void startApplication() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
         try {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "WikiTeX");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,15 +139,8 @@ public class DictController {
         int i;
         Word w = dict.findWord(stage.getElementAt(index));
 
-        if (dict.findWord(name) == null)
-            ;
-        else {
-            if (w.getName().equals(name))
-                ;
-            else {
-                return -1;
-            }
-        }
+        if (dict.findWord(name) != null || w.getName().equals(name))
+            return -1;
 
         Word x = new Word(name, pronounce, meaning);
         dict.getListWord().set(dict.getListWord().indexOf(w), x);
